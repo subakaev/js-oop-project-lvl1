@@ -1,4 +1,4 @@
-import StringValidator from "./validators/StringValidator";
+import StringValidator from './validators/StringValidator';
 
 function Validator() {}
 

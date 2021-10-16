@@ -1,3 +1,23 @@
+function isString(value) {
+  return typeof value === 'string' || value == null;
+}
+
+function isRequired(value) {
+  return value != null && value !== '';
+}
+
+function contains(param) {
+  return function check(value) {
+    return value?.includes(param);
+  };
+}
+
+function minLength(length) {
+  return function check(value) {
+    return value?.length >= length;
+  };
+}
+
 function StringValidator() {
   this.validators = [isString];
 }
@@ -13,34 +33,14 @@ StringValidator.prototype.required = function isExists() {
 };
 
 // TODO Do I need to check if we pass not a string here?
-StringValidator.prototype.contains = function (value) {
+StringValidator.prototype.contains = function check(value) {
   this.validators.push(contains(value));
   return this;
 };
 
-StringValidator.prototype.minLength = function (value) {
+StringValidator.prototype.minLength = function check(value) {
   this.validators.push(minLength(value));
   return this;
 };
-
-function isString(value) {
-  return typeof value == "string" || value == null;
-}
-
-function isRequired(value) {
-  return value != null && value != "";
-}
-
-function contains(param) {
-  return function (value) {
-    return value?.includes(param);
-  };
-}
-
-function minLength(length) {
-  return function (value) {
-    return value?.length >= length;
-  };
-}
 
 export default StringValidator;
