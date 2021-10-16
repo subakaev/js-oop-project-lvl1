@@ -23,7 +23,6 @@ function StringValidator() {
 }
 
 StringValidator.prototype.isValid = function isValidString(value) {
-  console.log(this);
   return this.validators.every((validate) => validate(value));
 };
 
