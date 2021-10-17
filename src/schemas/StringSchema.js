@@ -7,11 +7,13 @@ const validators = {
   minLength: (length) => (value) => value.length >= length,
 };
 
-function StringSchema() {
+function StringSchema(customValidators) {
   this.validators = [validators.string];
+  this.customValidators = customValidators;
 }
 
 StringSchema.prototype.isValid = function isValid(value) {
+  // TODO required check first
   return this.validators.every((validate) => validate(value));
 };
 
@@ -27,6 +29,14 @@ StringSchema.prototype.contains = function addContainsCheck(str) {
 
 StringSchema.prototype.minLength = function addMinLengthCheck(length) {
   this.validators.push(validators.minLength(length));
+  return this;
+};
+
+// TODO rename validatorName -> checkName?
+StringSchema.prototype.test = function addCustomCheck(validatorName, ...args) {
+  // TODO check validator name?
+  const validate = this.customValidators[validatorName];
+  this.validators.push((value) => validate(value, ...args));
   return this;
 };
 

@@ -7,8 +7,9 @@ const validators = {
   range: (min, max) => (value) => value >= min && value <= max, // TODO check range corectness?
 };
 
-function NumberSchema() {
+function NumberSchema(customValidators) {
   this.validators = [validators.number];
+  this.customValidators = customValidators;
 }
 
 NumberSchema.prototype.required = function addRequiredCheck() {
@@ -33,6 +34,15 @@ NumberSchema.prototype.isValid = function isValid(value) {
   }
 
   return this.validators.every((validate) => validate(value));
+};
+
+// TODO rename validatorName -> checkName?
+NumberSchema.prototype.test = function addCustomCheck(validatorName, ...args) {
+  // TODO check validator name?
+  const validate = this.customValidators[validatorName];
+  this.validators.push((value) => validate(value, ...args));
+
+  return this;
 };
 
 export default NumberSchema;
