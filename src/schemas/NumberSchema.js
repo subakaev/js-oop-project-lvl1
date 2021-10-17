@@ -27,6 +27,11 @@ NumberSchema.prototype.range = function addRangeCheck(min, max) {
 };
 
 NumberSchema.prototype.isValid = function isValid(value) {
+  // TODO refactor this as well as for all other schemas
+  if (!this.validators.includes(validators.required) && _.isUndefined(value)) {
+    return true;
+  }
+
   return this.validators.every((validate) => validate(value));
 };
 
