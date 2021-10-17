@@ -15,6 +15,15 @@ function NumberSchema(customValidators) {
 NumberSchema.prototype = Object.create(BaseSchema.prototype);
 NumberSchema.prototype.constructor = NumberSchema;
 
+// TODO temporary solution - REMOVE
+NumberSchema.prototype.isValid = function isValid(value) {
+  if (!this.checks.includes(validators.required) && _.isUndefined(value)) {
+    return true;
+  }
+  // TODO required check first
+  return this.checks.every((validate) => validate(value));
+};
+
 NumberSchema.prototype.required = function addRequiredCheck() {
   this.addCheck(validators.required);
   return this;
