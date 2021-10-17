@@ -1,19 +1,33 @@
+import _ from 'lodash';
+
+const validators = {
+  number: (value) => _.isUndefined(value) || _.isNumber(value),
+  required: (value) => _.isNumber(value),
+  positive: (value) => value > 0,
+  range: (min, max) => (value) => value >= min && value <= max, // TODO check range corectness?
+};
+
 function NumberSchema() {
-  this.validators = [];
+  this.validators = [validators.number];
 }
 
 NumberSchema.prototype.required = function addRequiredCheck() {
+  this.validators.push(validators.required);
   return this;
 };
 
 NumberSchema.prototype.positive = function addPositiveChech() {
+  this.validators.push(validators.positive);
   return this;
 };
 
-// TODO remove
-// eslint-disable-next-line no-unused-vars
 NumberSchema.prototype.range = function addRangeCheck(min, max) {
+  this.validators.push(validators.range(min, max));
   return this;
+};
+
+NumberSchema.prototype.isValid = function isValid(value) {
+  return this.validators.every((validate) => validate(value));
 };
 
 export default NumberSchema;
