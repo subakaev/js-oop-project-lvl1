@@ -16,12 +16,12 @@ ArraySchema.prototype.constructor = ArraySchema;
 
 ArraySchema.prototype.required = function addRequiredCheck() {
   // TODO required check first
-  this.validators.push(validators.required);
+  this.addCheck(validators.required);
   return this;
 };
 
 ArraySchema.prototype.sizeof = function addSizeofCheck(size) {
-  this.validators.push(validators.sizeof(size));
+  this.addCheck(validators.sizeof(size));
   return this;
 };
 

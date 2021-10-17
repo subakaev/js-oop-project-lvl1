@@ -16,17 +16,17 @@ NumberSchema.prototype = Object.create(BaseSchema.prototype);
 NumberSchema.prototype.constructor = NumberSchema;
 
 NumberSchema.prototype.required = function addRequiredCheck() {
-  this.validators.push(validators.required);
+  this.addCheck(validators.required);
   return this;
 };
 
 NumberSchema.prototype.positive = function addPositiveChech() {
-  this.validators.push(validators.positive);
+  this.addCheck(validators.positive);
   return this;
 };
 
 NumberSchema.prototype.range = function addRangeCheck(min, max) {
-  this.validators.push(validators.range(min, max));
+  this.addCheck(validators.range(min, max));
   return this;
 };
 

@@ -16,17 +16,17 @@ StringSchema.prototype = Object.create(BaseSchema.prototype);
 StringSchema.prototype.constructor = StringSchema;
 
 StringSchema.prototype.required = function addRequiredCheck() {
-  this.validators.push(validators.required);
+  this.addCheck(validators.required);
   return this;
 };
 
 StringSchema.prototype.contains = function addContainsCheck(str) {
-  this.validators.push(validators.contains(str));
+  this.addCheck(validators.contains(str));
   return this;
 };
 
 StringSchema.prototype.minLength = function addMinLengthCheck(length) {
-  this.validators.push(validators.minLength(length));
+  this.addCheck(validators.minLength(length));
   return this;
 };
 
