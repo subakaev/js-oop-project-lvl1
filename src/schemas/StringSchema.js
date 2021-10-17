@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import BaseSchema from './BaseSchema';
 
 const validators = {
   string: _.isString,
@@ -8,14 +9,11 @@ const validators = {
 };
 
 function StringSchema(customValidators) {
-  this.validators = [validators.string];
-  this.customValidators = customValidators;
+  BaseSchema.call(this, [validators.string], customValidators);
 }
 
-StringSchema.prototype.isValid = function isValid(value) {
-  // TODO required check first
-  return this.validators.every((validate) => validate(value));
-};
+StringSchema.prototype = Object.create(BaseSchema.prototype);
+StringSchema.prototype.constructor = StringSchema;
 
 StringSchema.prototype.required = function addRequiredCheck() {
   this.validators.push(validators.required);
@@ -29,14 +27,6 @@ StringSchema.prototype.contains = function addContainsCheck(str) {
 
 StringSchema.prototype.minLength = function addMinLengthCheck(length) {
   this.validators.push(validators.minLength(length));
-  return this;
-};
-
-// TODO rename validatorName -> checkName?
-StringSchema.prototype.test = function addCustomCheck(validatorName, ...args) {
-  // TODO check validator name?
-  const validate = this.customValidators[validatorName];
-  this.validators.push((value) => validate(value, ...args));
   return this;
 };
 

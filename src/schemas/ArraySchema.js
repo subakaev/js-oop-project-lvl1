@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import BaseSchema from './BaseSchema';
 
 const validators = {
   array: (value) => _.isUndefined(value) || Array.isArray(value),
@@ -7,9 +8,11 @@ const validators = {
 };
 
 function ArraySchema(customValidators) {
-  this.validators = [validators.array];
-  this.customValidators = customValidators;
+  BaseSchema.call(this, [validators.array], customValidators);
 }
+
+ArraySchema.prototype = Object.create(BaseSchema.prototype);
+ArraySchema.prototype.constructor = ArraySchema;
 
 ArraySchema.prototype.required = function addRequiredCheck() {
   // TODO required check first
@@ -19,18 +22,6 @@ ArraySchema.prototype.required = function addRequiredCheck() {
 
 ArraySchema.prototype.sizeof = function addSizeofCheck(size) {
   this.validators.push(validators.sizeof(size));
-  return this;
-};
-
-ArraySchema.prototype.isValid = function isValid(value) {
-  return this.validators.every((validate) => validate(value));
-};
-
-// TODO rename validatorName -> checkName?
-ArraySchema.prototype.test = function addCustomCheck(validatorName, ...args) {
-  // TODO check validator name?
-  const validate = this.customValidators[validatorName];
-  this.validators.push((value) => validate(value, ...args));
   return this;
 };
 

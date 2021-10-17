@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import BaseSchema from './BaseSchema';
 
 const validators = {
   number: (value) => _.isUndefined(value) || _.isNumber(value),
@@ -8,9 +9,11 @@ const validators = {
 };
 
 function NumberSchema(customValidators) {
-  this.validators = [validators.number];
-  this.customValidators = customValidators;
+  BaseSchema.call(this, [validators.number], customValidators);
 }
+
+NumberSchema.prototype = Object.create(BaseSchema.prototype);
+NumberSchema.prototype.constructor = NumberSchema;
 
 NumberSchema.prototype.required = function addRequiredCheck() {
   this.validators.push(validators.required);
@@ -24,24 +27,6 @@ NumberSchema.prototype.positive = function addPositiveChech() {
 
 NumberSchema.prototype.range = function addRangeCheck(min, max) {
   this.validators.push(validators.range(min, max));
-  return this;
-};
-
-NumberSchema.prototype.isValid = function isValid(value) {
-  // TODO refactor this as well as for all other schemas
-  if (!this.validators.includes(validators.required) && _.isUndefined(value)) {
-    return true;
-  }
-
-  return this.validators.every((validate) => validate(value));
-};
-
-// TODO rename validatorName -> checkName?
-NumberSchema.prototype.test = function addCustomCheck(validatorName, ...args) {
-  // TODO check validator name?
-  const validate = this.customValidators[validatorName];
-  this.validators.push((value) => validate(value, ...args));
-
   return this;
 };
 
