@@ -57,4 +57,14 @@ describe('NumberSchema tests', () => {
     schema.range(-5, 5);
     expect(schema.isValid(value)).toBe(expectedResult);
   });
+
+  test('custom validators tests', () => {
+    const v = new Validator();
+    const fn = (value, min) => value >= min;
+    v.addValidator('number', 'min', fn);
+
+    const customSchema = v.number().test('min', 5);
+    expect(customSchema.isValid(4)).toBe(false); // false
+    expect(customSchema.isValid(6)).toBe(true); // true
+  });
 });

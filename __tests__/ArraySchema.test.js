@@ -45,4 +45,6 @@ describe('ArraySchema tests', () => {
 
     expect(schema.isValid(value)).toBe(expectedResult);
   });
+
+  // TODO add custom validators tests
 });

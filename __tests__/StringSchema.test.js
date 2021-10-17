@@ -48,4 +48,18 @@ describe('StringSchema tests', () => {
 
     expect(schema.isValid(value)).toBe(expectedResult);
   });
+
+  test('custom validators test', () => {
+    const validator = new Validator();
+
+    const fn = (value, start) => value.startsWith(start);
+    // Метод добавления новых валидаторов
+    // addValidator(type, name, fn)
+    validator.addValidator('string', 'startWith', fn);
+
+    const customSchema = validator.string().test('startWith', 'H');
+
+    expect(customSchema.isValid('exlet')).toBe(false);
+    expect(customSchema.isValid('Hexlet')).toBe(true);
+  });
 });

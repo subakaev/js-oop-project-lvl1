@@ -26,4 +26,6 @@ describe('ObjectSchema tests', () => {
     expect(schema.isValid({ name: 'test', age: -21 })).toBeFalsy();
     expect(schema.isValid({ name: 'test' })).toBeTruthy();
   });
+
+  // TODO add custom validators tests
 });
