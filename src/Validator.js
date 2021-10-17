@@ -1,5 +1,6 @@
 import ArraySchema from './schemas/ArraySchema';
 import NumberSchema from './schemas/NumberSchema';
+import ObjectSchema from './schemas/ObjectSchema';
 import StringSchema from './schemas/StringSchema';
 
 function Validator() {}
@@ -14,6 +15,10 @@ Validator.prototype.number = function getNumberSchema() {
 
 Validator.prototype.array = function getArraySchema() {
   return new ArraySchema();
+};
+
+Validator.prototype.object = function getObjectSchema() {
+  return new ObjectSchema();
 };
 
 export default Validator;
