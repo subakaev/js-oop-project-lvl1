@@ -1,21 +1,27 @@
+import _ from 'lodash';
+
+const validators = {
+  array: (value) => _.isUndefined(value) || Array.isArray(value),
+  required: Array.isArray,
+  sizeof: (size) => (value) => value.length === size,
+};
+
 function ArraySchema() {
-  this.validators = [];
+  this.validators = [validators.array];
 }
 
 ArraySchema.prototype.required = function addRequiredCheck() {
+  this.validators.push(validators.required);
   return this;
 };
 
-// TODO remove
-// eslint-disable-next-line no-unused-vars
 ArraySchema.prototype.sizeof = function addSizeofCheck(size) {
+  this.validators.push(validators.sizeof(size));
   return this;
 };
 
-// TODO remove
-// eslint-disable-next-line no-unused-vars
 ArraySchema.prototype.isValid = function isValid(value) {
-  return false;
+  return this.validators.every((validate) => validate(value));
 };
 
 export default ArraySchema;
