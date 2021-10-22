@@ -9,21 +9,28 @@ const builtInValidators = {
   string: {
     string: _.isString,
     required: (value) => value !== '',
-    contains: (str) => (value) => value.includes(str),
-    minLength: (length) => (value) => value.length >= length,
+    contains: (value, str) => value.includes(str),
+    minLength: (value, length) => value.length >= length,
   },
   number: {
     number: (value) => _.isUndefined(value) || _.isNumber(value),
     required: (value) => _.isNumber(value),
     positive: (value) => value > 0,
-    range: (min, max) => (value) => value >= min && value <= max, // TODO check range corectness?
+    range: (value, min, max) => value >= min && value <= max, // TODO check range corectness?
   },
   array: {
     array: (value) => _.isUndefined(value) || Array.isArray(value),
     required: Array.isArray,
-    sizeof: (size) => (value) => value.length === size,
+    sizeof: (value, size) => value.length === size,
   },
-  object: {},
+  object: {
+    object: _.isObject,
+    shape: (value, schemaObject) => {
+      const entries = Object.entries(schemaObject);
+
+      return entries.every(([key, schema]) => schema.isValid(value[key]));
+    },
+  },
 };
 
 function Validator() {
