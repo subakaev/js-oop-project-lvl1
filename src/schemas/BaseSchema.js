@@ -30,7 +30,7 @@ BaseSchema.prototype.addCheck = function addCheck(validatorName, ...args) {
 };
 
 BaseSchema.prototype.isValid = function isValid(value) {
-  if (!this.requiredCheckActive && _.isUndefined(value)) {
+  if (!this.requiredCheckActive && !this.validators.required(value)) {
     return true;
   }
 

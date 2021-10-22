@@ -13,18 +13,21 @@ describe('ObjectSchema tests', () => {
     });
   });
 
-  test('Schema should work', () => {
-    expect(schema.isValid({})).toBeFalsy();
-    expect(schema.isValid(0)).toBeFalsy();
-    expect(schema.isValid([])).toBeFalsy();
-    expect(schema.isValid(true)).toBeFalsy();
-    expect(schema.isValid('string')).toBeFalsy();
-
-    expect(schema.isValid({ name: '', age: 21 })).toBeFalsy();
-    expect(schema.isValid({ age: 21 })).toBeFalsy();
-    expect(schema.isValid({ name: 'test', age: 21 })).toBeTruthy();
-    expect(schema.isValid({ name: 'test', age: -21 })).toBeFalsy();
-    expect(schema.isValid({ name: 'test' })).toBeTruthy();
+  test.each([
+    [undefined, true],
+    [null, true],
+    [0, false],
+    [true, false],
+    ['string', false],
+    [{}, false],
+    [[], false],
+    [{ name: '', age: 21 }, false],
+    [{ age: 21 }, false],
+    [{ name: 'test', age: -21 }, false],
+    [{ name: 'test' }, true],
+    [{ name: 'test', age: 21 }, true],
+  ])('Should for %j return %s', (value, expectedResult) => {
+    expect(schema.isValid(value)).toBe(expectedResult);
   });
 
   // TODO add custom validators tests

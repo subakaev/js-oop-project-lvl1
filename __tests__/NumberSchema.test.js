@@ -12,7 +12,7 @@ describe('NumberSchema tests', () => {
 
   test.each([
     [undefined, true],
-    [null, false],
+    [null, true],
     ['', false],
     ['1', false],
     [0, true],

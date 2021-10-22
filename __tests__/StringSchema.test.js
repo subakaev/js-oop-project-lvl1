@@ -11,7 +11,7 @@ describe('StringSchema tests', () => {
 
   test.each([
     [undefined, true],
-    [null, false],
+    [null, true],
     ['', true],
     [0, false],
     [true, false],

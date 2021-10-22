@@ -8,23 +8,24 @@ import StringSchema from './schemas/StringSchema';
 const builtInValidators = {
   string: {
     string: _.isString,
-    required: (value) => value !== '',
+    required: (value) => !_.isNil(value) && value !== '',
     contains: (value, str) => value.includes(str),
     minLength: (value, length) => value.length >= length,
   },
   number: {
-    number: (value) => _.isUndefined(value) || _.isNumber(value),
-    required: (value) => _.isNumber(value),
+    number: _.isNumber,
+    required: (value) => !_.isNil(value),
     positive: (value) => value > 0,
     range: (value, min, max) => value >= min && value <= max,
   },
   array: {
-    array: (value) => _.isUndefined(value) || Array.isArray(value),
-    required: Array.isArray,
+    array: (value) => Array.isArray(value),
+    required: (value) => !_.isUndefined(value),
     sizeof: (value, size) => value.length === size,
   },
   object: {
     object: _.isObject,
+    required: (value) => !_.isNil(value),
     shape: (value, schemaObject) => {
       const entries = Object.entries(schemaObject);
 
