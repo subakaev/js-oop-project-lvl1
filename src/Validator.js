@@ -16,7 +16,7 @@ const builtInValidators = {
     number: (value) => _.isUndefined(value) || _.isNumber(value),
     required: (value) => _.isNumber(value),
     positive: (value) => value > 0,
-    range: (value, min, max) => value >= min && value <= max, // TODO check range corectness?
+    range: (value, min, max) => value >= min && value <= max,
   },
   array: {
     array: (value) => _.isUndefined(value) || Array.isArray(value),
@@ -58,7 +58,9 @@ Validator.prototype.addValidator = function addValidator(
   validatorName,
   validate,
 ) {
-  // TODO check schema before add?
+  if (!_.has(this.validators, schemaName)) {
+    throw new Error(`schema ${schemaName} is not supported!`);
+  }
   this.validators[schemaName][validatorName] = validate;
 };
 

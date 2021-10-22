@@ -7,13 +7,19 @@ function BaseSchema(schemaName, validators) {
     );
   }
 
-  // TODO rename to checks? because main class name is Validator to remove semantic inconsistences?
+  this.schemaName = schemaName;
   this.validators = validators;
   this.checks = [validators[schemaName]];
   this.requiredCheckActive = false;
 }
 
 BaseSchema.prototype.addCheck = function addCheck(validatorName, ...args) {
+  if (!_.has(this.validators, validatorName)) {
+    throw new Error(
+      `Validator '${validatorName}' is not exist for schema '${this.schemaName}'`,
+    );
+  }
+
   if (validatorName === 'required') {
     this.requiredCheckActive = true;
   }
@@ -28,13 +34,10 @@ BaseSchema.prototype.isValid = function isValid(value) {
     return true;
   }
 
-  // TODO required check first
   return this.checks.every((validate) => validate(value));
 };
 
-// TODO rename validatorName -> checkName?
 BaseSchema.prototype.test = function addCustomCheck(validatorName, ...args) {
-  // TODO check validator name?
   this.addCheck(validatorName, ...args);
   return this;
 };
