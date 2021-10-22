@@ -1,32 +1,24 @@
-import _ from 'lodash';
 import BaseSchema from './BaseSchema';
 
-const validators = {
-  string: _.isString,
-  required: (value) => value !== '',
-  contains: (str) => (value) => value.includes(str),
-  minLength: (length) => (value) => value.length >= length,
-};
-
-function StringSchema(customValidators) {
-  BaseSchema.call(this, [validators.string], customValidators);
+function StringSchema(validators) {
+  BaseSchema.call(this, validators, [validators.string]);
 }
 
 StringSchema.prototype = Object.create(BaseSchema.prototype);
 StringSchema.prototype.constructor = StringSchema;
 
 StringSchema.prototype.required = function addRequiredCheck() {
-  this.addCheck(validators.required);
+  this.addCheck(this.validators.required);
   return this;
 };
 
 StringSchema.prototype.contains = function addContainsCheck(str) {
-  this.addCheck(validators.contains(str));
+  this.addCheck(this.validators.contains(str));
   return this;
 };
 
 StringSchema.prototype.minLength = function addMinLengthCheck(length) {
-  this.addCheck(validators.minLength(length));
+  this.addCheck(this.validators.minLength(length));
   return this;
 };
 

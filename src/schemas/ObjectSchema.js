@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import BaseSchema from './BaseSchema';
 
-function ObjectSchema(customValidators) {
-  BaseSchema.call(this, [], customValidators); // TODO
+function ObjectSchema(validators) {
+  BaseSchema.call(this, validators, []); // TODO
 }
 
 ObjectSchema.prototype = Object.create(BaseSchema.prototype);

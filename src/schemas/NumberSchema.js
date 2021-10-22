@@ -1,15 +1,8 @@
 import _ from 'lodash';
 import BaseSchema from './BaseSchema';
 
-const validators = {
-  number: (value) => _.isUndefined(value) || _.isNumber(value),
-  required: (value) => _.isNumber(value),
-  positive: (value) => value > 0,
-  range: (min, max) => (value) => value >= min && value <= max, // TODO check range corectness?
-};
-
-function NumberSchema(customValidators) {
-  BaseSchema.call(this, [validators.number], customValidators);
+function NumberSchema(validators) {
+  BaseSchema.call(this, validators, [validators.number]);
 }
 
 NumberSchema.prototype = Object.create(BaseSchema.prototype);
@@ -17,7 +10,7 @@ NumberSchema.prototype.constructor = NumberSchema;
 
 // TODO temporary solution - REMOVE
 NumberSchema.prototype.isValid = function isValid(value) {
-  if (!this.checks.includes(validators.required) && _.isUndefined(value)) {
+  if (!this.checks.includes(this.validators.required) && _.isUndefined(value)) {
     return true;
   }
   // TODO required check first
@@ -25,17 +18,17 @@ NumberSchema.prototype.isValid = function isValid(value) {
 };
 
 NumberSchema.prototype.required = function addRequiredCheck() {
-  this.addCheck(validators.required);
+  this.addCheck(this.validators.required);
   return this;
 };
 
 NumberSchema.prototype.positive = function addPositiveChech() {
-  this.addCheck(validators.positive);
+  this.addCheck(this.validators.positive);
   return this;
 };
 
 NumberSchema.prototype.range = function addRangeCheck(min, max) {
-  this.addCheck(validators.range(min, max));
+  this.addCheck(this.validators.range(min, max));
   return this;
 };
 

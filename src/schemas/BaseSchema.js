@@ -1,4 +1,4 @@
-function BaseSchema(checks, customValidators) {
+function BaseSchema(validators, checks) {
   if (this.constructor === BaseSchema) {
     throw new Error(
       `Can't instantiate abstract ${this.constructor.name} class`,
@@ -6,8 +6,8 @@ function BaseSchema(checks, customValidators) {
   }
 
   // TODO rename to checks? because main class name is Validator to remove semantic inconsistences?
+  this.validators = validators;
   this.checks = checks;
-  this.customValidators = customValidators;
 }
 
 BaseSchema.prototype.addCheck = function addCheck(validate) {
@@ -22,7 +22,8 @@ BaseSchema.prototype.isValid = function isValid(value) {
 // TODO rename validatorName -> checkName?
 BaseSchema.prototype.test = function addCustomCheck(validatorName, ...args) {
   // TODO check validator name?
-  const validate = this.customValidators[validatorName];
+  console.log(this.checks, validatorName);
+  const validate = this.validators[validatorName];
   this.checks.push((value) => validate(value, ...args));
   return this;
 };
