@@ -2,10 +2,11 @@ import { beforeEach, describe } from '@jest/globals';
 import Validator from '..';
 
 describe('NumberSchema tests', () => {
+  let validator;
   let schema;
 
   beforeEach(() => {
-    const validator = new Validator();
+    validator = new Validator();
 
     schema = validator.number();
   });
@@ -32,6 +33,7 @@ describe('NumberSchema tests', () => {
     [{}, false],
   ])('Required schema for %j should return %s', (value, expectedResult) => {
     schema.required();
+
     expect(schema.isValid(value)).toBe(expectedResult);
   });
 
@@ -42,6 +44,7 @@ describe('NumberSchema tests', () => {
     [123, true],
   ])('Positive schema for %j should return %s', (value, expectedResult) => {
     schema.positive();
+
     expect(schema.isValid(value)).toBe(expectedResult);
   });
 
@@ -55,16 +58,18 @@ describe('NumberSchema tests', () => {
     [123, false],
   ])('Range schema for %j should return %s', (value, expectedResult) => {
     schema.range(-5, 5);
+
     expect(schema.isValid(value)).toBe(expectedResult);
   });
 
-  test('custom validators tests', () => {
-    const v = new Validator();
-    const fn = (value, min) => value >= min;
-    v.addValidator('number', 'min', fn);
+  test('Custom validator tests', () => {
+    const validate = (value, min) => value >= min;
+    validator.addValidator('number', 'min', validate);
 
-    const customSchema = v.number().test('min', 5);
-    expect(customSchema.isValid(4)).toBe(false); // false
-    expect(customSchema.isValid(6)).toBe(true); // true
+    schema.test('min', 5);
+
+    expect(schema.isValid(4)).toBeFalsy();
+    expect(schema.isValid(5)).toBeTruthy();
+    expect(schema.isValid(6)).toBeTruthy();
   });
 });

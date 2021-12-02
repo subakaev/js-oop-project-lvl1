@@ -2,10 +2,11 @@ import { beforeEach } from '@jest/globals';
 import Validator from '../index.js';
 
 describe('StringSchema tests', () => {
+  let validator;
   let schema;
 
   beforeEach(() => {
-    const validator = new Validator();
+    validator = new Validator();
     schema = validator.string();
   });
 
@@ -26,6 +27,7 @@ describe('StringSchema tests', () => {
     ['a', true],
   ])('Required schema for %j should return %s', (value, expectedResult) => {
     schema.required();
+
     expect(schema.isValid(value)).toBe(expectedResult);
   });
 
@@ -49,17 +51,13 @@ describe('StringSchema tests', () => {
     expect(schema.isValid(value)).toBe(expectedResult);
   });
 
-  test('custom validators test', () => {
-    const validator = new Validator();
+  test('Custom validator test', () => {
+    const validate = (value, start) => value.startsWith(start);
+    validator.addValidator('string', 'startWith', validate);
 
-    const fn = (value, start) => value.startsWith(start);
-    // Метод добавления новых валидаторов
-    // addValidator(type, name, fn)
-    validator.addValidator('string', 'startWith', fn);
+    schema.test('startWith', 'H');
 
-    const customSchema = validator.string().test('startWith', 'H');
-
-    expect(customSchema.isValid('exlet')).toBe(false);
-    expect(customSchema.isValid('Hexlet')).toBe(true);
+    expect(schema.isValid('exlet')).toBeFalsy();
+    expect(schema.isValid('Hexlet')).toBeTruthy();
   });
 });

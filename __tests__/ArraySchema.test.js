@@ -2,10 +2,11 @@ import { beforeEach, describe } from '@jest/globals';
 import Validator from '..';
 
 describe('ArraySchema tests', () => {
+  let validator;
   let schema;
 
   beforeEach(() => {
-    const validator = new Validator();
+    validator = new Validator();
 
     schema = validator.array();
   });
@@ -32,6 +33,7 @@ describe('ArraySchema tests', () => {
     [{}, false],
   ])('Required schema for %j should return %s', (value, expectedResult) => {
     schema.required();
+
     expect(schema.isValid(value)).toBe(expectedResult);
   });
 
@@ -46,5 +48,14 @@ describe('ArraySchema tests', () => {
     expect(schema.isValid(value)).toBe(expectedResult);
   });
 
-  // TODO add custom validators tests
+  test('Custom validator test', () => {
+    const validate = (value, search) => value.includes(search);
+    validator.addValidator('array', 'includes', validate);
+
+    schema.test('includes', 1);
+
+    expect(schema.isValid([1])).toBeTruthy();
+    expect(schema.isValid([2])).toBeFalsy();
+    expect(schema.isValid([1, 2])).toBeTruthy();
+  });
 });

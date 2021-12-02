@@ -2,10 +2,11 @@ import { beforeEach, describe } from '@jest/globals';
 import Validator from '..';
 
 describe('ObjectSchema tests', () => {
+  let validator;
   let schema;
 
   beforeEach(() => {
-    const validator = new Validator();
+    validator = new Validator();
 
     schema = validator.object().shape({
       name: validator.string().required(),
@@ -30,5 +31,14 @@ describe('ObjectSchema tests', () => {
     expect(schema.isValid(value)).toBe(expectedResult);
   });
 
-  // TODO add custom validators tests
+  test('Custom validator test', () => {
+    const validate = (value, minAge) => value.age >= minAge;
+    validator.addValidator('object', 'minAge', validate);
+
+    schema.test('minAge', 18);
+
+    expect(schema.isValid({ name: 'test', age: 17 })).toBeFalsy();
+    expect(schema.isValid({ name: 'test', age: 18 })).toBeTruthy();
+    expect(schema.isValid({ name: 'test', age: 19 })).toBeTruthy();
+  });
 });
