@@ -1,20 +1,17 @@
 import BaseSchema from './BaseSchema';
 
-function ArraySchema(validators) {
-  BaseSchema.call(this, 'array', validators);
+export default class ArraySchema extends BaseSchema {
+  constructor(validators) {
+    super('array', validators);
+  }
+
+  required() {
+    this.addCheck('required');
+    return this;
+  }
+
+  sizeof(size) {
+    this.addCheck('sizeof', size);
+    return this;
+  }
 }
-
-ArraySchema.prototype = Object.create(BaseSchema.prototype);
-ArraySchema.prototype.constructor = ArraySchema;
-
-ArraySchema.prototype.required = function addRequiredCheck() {
-  this.addCheck('required');
-  return this;
-};
-
-ArraySchema.prototype.sizeof = function addSizeofCheck(size) {
-  this.addCheck('sizeof', size);
-  return this;
-};
-
-export default ArraySchema;
