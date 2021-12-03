@@ -121,7 +121,7 @@ schema.isValid({ name: '', age: null }); // false
 schema.isValid({ name: 'ada', age: -5 }); // false
 ```
 
-### Custom validator
+### Custom validators
 
 You can write your own validators for any schema using `addValidator` method
 
